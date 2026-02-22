@@ -1,0 +1,17 @@
+{
+  "rows_total": 1801,
+  "rows_compared_tracking": 1801,
+  "rows_compared_contrib": 1801,
+  "rows_dropped_due_to_key_mismatch_tracking_only": 0,
+  "rows_dropped_due_to_key_mismatch_contrib_only": 0,
+  "max_abs_diff_tracking": 3.106942150044034e-05,
+  "mean_abs_diff_tracking": 2.350789865667903e-08,
+  "median_abs_diff_tracking": 5.861977570020827e-14,
+  "max_abs_diff_contrib": 1.0160761121369433e-12,
+  "mean_abs_diff_contrib": 8.043701431990834e-14,
+  "median_abs_diff_contrib": 5.81756864903582e-14,
+  "count_exceed_tol_tracking": 2,
+  "count_exceed_tol_contrib": 0,
+  "tolerance": 1e-08,
+  "csv_path": "gdpnow_validation_results.csv"
+}

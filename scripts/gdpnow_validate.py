@@ -49,6 +49,9 @@ CONTRIB_COMPONENT_COLUMNS = [
     "Change in inventory investment",
 ]
 HEADER_WHITESPACE_RE = re.compile(r"\s+")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_WORKBOOK_PATH = PROJECT_ROOT / "data" / "GDPTrackingModelDataAndForecasts.xlsx"
+DEFAULT_OUTDIR = PROJECT_ROOT / "outputs"
 
 
 def normalize_headers(values: Iterable[Any]) -> list[str]:
@@ -356,8 +359,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "workbook_path",
         nargs="?",
-        default="data/GDPTrackingModelDataAndForecasts.xlsx",
-        help="Path to GDPTrackingModelDataAndForecasts.xlsx (default: data/...xlsx)",
+        default=str(DEFAULT_WORKBOOK_PATH),
+        help=f"Path to GDPTrackingModelDataAndForecasts.xlsx (default: {DEFAULT_WORKBOOK_PATH})",
     )
     parser.add_argument(
         "--tol",
@@ -368,8 +371,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--outdir",
         type=Path,
-        default=Path("."),
-        help="Output directory for CSV/summary artifacts (default: current directory).",
+        default=DEFAULT_OUTDIR,
+        help=f"Output directory for CSV/summary artifacts (default: {DEFAULT_OUTDIR}).",
     )
     parser.add_argument(
         "--fisher-check",

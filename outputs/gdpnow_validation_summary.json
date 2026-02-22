@@ -13,5 +13,5 @@
   "count_exceed_tol_tracking": 2,
   "count_exceed_tol_contrib": 0,
   "tolerance": 1e-08,
-  "csv_path": "gdpnow_validation_results.csv"
+  "csv_path": "/Users/rayhanmomin/code/atl-gdpnow/outputs/gdpnow_validation_results.csv"
 }

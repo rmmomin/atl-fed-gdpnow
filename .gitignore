@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local workbook artifacts (kept outside source control by default)
+data/*.xlsx
+data/*.xlsm

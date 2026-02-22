@@ -1,4 +1,4 @@
-# ATL GDPNow Validation
+# Atlanta Fed GDPNow Validation
 
 Python validation utility for the Atlanta Fed GDPNow workbook:
 
@@ -9,9 +9,11 @@ Python validation utility for the Atlanta Fed GDPNow workbook:
 
 ## Files
 
-- `gdpnow_validate.py`: main validation script
-- `gdpnow_validation_results.csv`: row-level comparison output (generated)
-- `gdpnow_validation_summary.json`: summary metrics (generated)
+- `scripts/gdpnow_validate.py`: main validation script
+- `scripts/gdpnow_plot.py`: plotting utility for model vs official nowcast
+- `outputs/gdpnow_validation_results.csv`: row-level comparison output (generated)
+- `outputs/gdpnow_validation_summary.json`: summary metrics (generated)
+- `outputs/gdpnow_model_vs_official.png`: comparison chart (generated)
 - `data/GDPTrackingModelDataAndForecasts.xlsx`: source workbook
 
 ## Requirements
@@ -32,20 +34,26 @@ python3 -m pip install pandas numpy openpyxl
 Default workbook path:
 
 ```bash
-python3 gdpnow_validate.py
+python3 scripts/gdpnow_validate.py
 ```
 
 Explicit workbook and output directory:
 
 ```bash
-python3 gdpnow_validate.py data/GDPTrackingModelDataAndForecasts.xlsx --outdir .
+python3 scripts/gdpnow_validate.py data/GDPTrackingModelDataAndForecasts.xlsx --outdir outputs
 ```
 
 Options:
 
 - `--tol`: absolute tolerance for mismatch counting (default: `1e-8`)
-- `--outdir`: output directory for CSV/JSON artifacts (default: current directory)
+- `--outdir`: output directory for CSV/JSON artifacts (default: `outputs/`)
 - `--fisher-check`: optional deeper check; script prints a clear skip message if direct mapping is not identifiable
+
+Generate the comparison plot:
+
+```bash
+python3 scripts/gdpnow_plot.py --csv outputs/gdpnow_validation_results.csv --out outputs/gdpnow_model_vs_official.png
+```
 
 ## Validation Logic
 
@@ -66,7 +74,7 @@ Key handling:
 - Deduplicates duplicate key rows (keeps first, logs warning)
 - Inner-merges on the two key columns
 
-## Output Columns (`gdpnow_validation_results.csv`)
+## Output Columns (`outputs/gdpnow_validation_results.csv`)
 
 - `Forecast Date`
 - `Quarter being forecasted`

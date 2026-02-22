@@ -1,0 +1,13 @@
+{
+  "forecast_date": "2026-02-19",
+  "target_quarter": "2025Q4",
+  "target_quarter_end": "2025-12-31",
+  "gdp_nowcast_python_fisher": 3.5958305368100962,
+  "gdp_nowcast_official_tracking": 2.9989686770822033,
+  "diff_python_minus_official": 0.596861859727893,
+  "factor_series_count": 80,
+  "top_indicators_per_component": 6,
+  "use_kalman": false,
+  "decay": 0.98,
+  "exclude_pandemic_2020": true
+}

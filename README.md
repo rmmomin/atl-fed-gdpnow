@@ -6,14 +6,18 @@ Python validation utility for the Atlanta Fed GDPNow workbook:
 - Recomputes GDP nowcast from contribution components in `ContribArchives`
 - Compares against official nowcast in `TrackingArchives!AB` and `ContribArchives!X`
 - Writes row-level CSV and summary JSON artifacts
+- Includes a full GDPNow-style model clone pipeline (factor + bridge + BVAR + constrained blend + Fisher aggregation)
 
 ## Files
 
 - `scripts/gdpnow_validate.py`: main validation script
 - `scripts/gdpnow_plot.py`: plotting utility for model vs official nowcast
+- `scripts/gdpnow_full_model.py`: full GDPNow-style model clone
 - `outputs/gdpnow_validation_results.csv`: row-level comparison output (generated)
 - `outputs/gdpnow_validation_summary.json`: summary metrics (generated)
 - `outputs/gdpnow_model_vs_official.png`: comparison chart (generated)
+- `outputs/gdpnow_full_model_components.csv`: component-level full-model output (generated)
+- `outputs/gdpnow_full_model_summary.json`: topline full-model summary (generated)
 - `data/GDPTrackingModelDataAndForecasts.xlsx`: source workbook
 
 ## Requirements
@@ -22,11 +26,12 @@ Python validation utility for the Atlanta Fed GDPNow workbook:
 - `pandas`
 - `numpy`
 - `openpyxl`
+- `statsmodels`
 
 Install dependencies:
 
 ```bash
-python3 -m pip install pandas numpy openpyxl
+python3 -m pip install pandas numpy openpyxl statsmodels
 ```
 
 ## Usage
@@ -54,6 +59,22 @@ Generate the comparison plot:
 ```bash
 python3 scripts/gdpnow_plot.py --csv outputs/gdpnow_validation_results.csv --out outputs/gdpnow_model_vs_official.png
 ```
+
+Run the full GDPNow-style model clone:
+
+```bash
+python3 scripts/gdpnow_full_model.py --outdir outputs --no-kalman --factor-max-series 80
+```
+
+Full-model options:
+
+- `--as-of-date YYYY-MM-DD`: run model as of a specific forecast date
+- `--quarter YYYYQn`: force a target quarter
+- `--top-indicators`: monthly indicators per bridge equation (default: `6`)
+- `--factor-max-series`: transformed monthly series count for factor estimation (default: `126`)
+- `--no-kalman`: use PCA factor only (faster; Kalman path is default when omitted)
+- `--decay`: time-decay for weighted regressions (default: `0.98`)
+- `--include-pandemic-2020`: include 2020Q1–Q4 in blend/bridge weight estimation
 
 ## Validation Logic
 

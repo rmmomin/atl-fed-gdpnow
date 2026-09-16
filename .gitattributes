@@ -1,0 +1,2 @@
+# Preserve downloaded release snapshots byte-for-byte for provenance hashes.
+data/ism/raw/*.html -text -diff

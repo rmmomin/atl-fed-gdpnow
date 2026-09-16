@@ -6,13 +6,37 @@ Python validation utility for the Atlanta Fed GDPNow workbook:
 - Recomputes GDP nowcast from contribution components in `ContribArchives`
 - Compares against official nowcast in `TrackingArchives!AB` and `ContribArchives!X`
 - Writes row-level CSV and summary JSON artifacts
-- Includes a full GDPNow-style model clone pipeline (factor + bridge + BVAR + constrained blend + Fisher aggregation)
+- Includes an approximate GDPNow-style pipeline (factor + bridge + BVAR + blend + Fisher aggregation). It is not an exact independent replication.
+
+## Updated 2026 Q3 run
+
+Downloaded the official workbook on September 16, 2026. Its latest forecast is dated **September 10, 2026**; downloading it today does not incorporate later releases. The February workbook remains available under its original filename.
+
+| Run | Real GDP growth, annualized |
+| --- | ---: |
+| Corrected model, PCA with 80 series | 3.6127% |
+| Corrected model, PCA with 126 series | 3.6691% |
+| Atlanta Fed, same September 10 snapshot | 4.4164% |
+
+The active-quarter loader and quarterly growth/inventory units have been corrected. Generic component bridges, incomplete factor inputs, borrowed price forecasts and weights, and missing specialized inventory/trade calculations still prevent exact replication. See [the run report](outputs/2026Q3_2026-09-10/run_report.md), [data coverage](outputs/2026Q3_2026-09-10/data_refresh_summary.json), and [source provenance](data/GDPTrackingModelDataAndForecasts_2026-09-16.source.json).
+
+Reproduce the corrected 80-series run:
+
+```bash
+python3 scripts/gdpnow_full_model.py data/GDPTrackingModelDataAndForecasts_2026-09-16.xlsx \
+  --quarter 2026Q3 --no-kalman --factor-max-series 80 \
+  --outdir outputs/2026Q3_2026-09-10/pca80
+```
+
+The workbook is local and ignored by Git. Its official download URL and SHA-256 are in the provenance file; that live URL will eventually serve a newer vintage. Pass the dated workbook explicitly, since the default filename still refers to the original snapshot. Run regression checks with `python3 -m unittest discover -s tests -v`.
 
 ## Files
 
+ISM backfill: [data/ism/README.md](data/ism/README.md) documents the release-based collector and recovered eight-series panel for August 2025–August 2026. Source release vintages and revision differences are preserved. This initial collection is not yet connected to the model.
+
 - `scripts/gdpnow_validate.py`: main validation script
 - `scripts/gdpnow_plot.py`: plotting utility for model vs official nowcast
-- `scripts/gdpnow_full_model.py`: full GDPNow-style model clone
+- `scripts/gdpnow_full_model.py`: approximate GDPNow-style model
 - `outputs/gdpnow_validation_results.csv`: row-level comparison output (generated)
 - `outputs/gdpnow_validation_summary.json`: summary metrics (generated)
 - `outputs/gdpnow_model_vs_official.png`: comparison chart (generated)
@@ -60,7 +84,7 @@ Generate the comparison plot:
 python3 scripts/gdpnow_plot.py --csv outputs/gdpnow_validation_results.csv --out outputs/gdpnow_model_vs_official.png
 ```
 
-Run the full GDPNow-style model clone:
+Run the approximate model on the original workbook:
 
 ```bash
 python3 scripts/gdpnow_full_model.py --outdir outputs --no-kalman --factor-max-series 80
@@ -68,7 +92,7 @@ python3 scripts/gdpnow_full_model.py --outdir outputs --no-kalman --factor-max-s
 
 Full-model options:
 
-- `--as-of-date YYYY-MM-DD`: run model as of a specific forecast date
+- `--as-of-date YYYY-MM-DD`: select a forecast row on or before this date; this does not reconstruct historical data vintages
 - `--quarter YYYYQn`: force a target quarter
 - `--top-indicators`: monthly indicators per bridge equation (default: `6`)
 - `--factor-max-series`: transformed monthly series count for factor estimation (default: `126`)
@@ -107,7 +131,7 @@ Key handling:
 - `abs_diff_tracking`
 - `abs_diff_contrib`
 
-## Current Run Snapshot
+## Original February Workbook Reconciliation
 
 On the included workbook:
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -210,9 +211,55 @@ def load_tracking_latest(
             "Services imports",
             "Federal Govt",
             "S&L",
-            "Change in inventory investment ($Bil 2009)",
         ],
     )
+    tracking["tracking_sheet"] = "TrackingArchives"
+    # The active quarter lives in a transposed table, outside TrackingArchives.
+    history = pd.read_excel(path, sheet_name="TrackingHistory", header=None, engine="openpyxl")
+    title = " ".join(history.iloc[:2, :2].fillna("").astype(str).to_numpy().ravel())
+    match = re.search(r"(20\d{2})q([1-4])", title, flags=re.IGNORECASE)
+    if not match:
+        raise ValueError("Cannot identify the active quarter in TrackingHistory.")
+    active_quarter = pd.Period(f"{match[1]}Q{match[2]}", freq="Q")
+    history_labels = history.iloc[:, 1].map(
+        lambda value: re.sub(r"\s+", " ", str(value).replace("**", "")).strip()
+    )
+    current_labels = {
+        "GDP Nowcast": "GDP Nowcast",
+        "2- PCE Goods": "PCE Goods",
+        "3- PCE Services": "PCE Services",
+        "7- Equipment": "Equipment",
+        "8- Intellectual Property Products": "Intellectual Property Products",
+        "9- Structures": "Structures",
+        "10- Residential": "Residential",
+        "12- Federal": "Federal Govt",
+        "13- State and Local": "S&L",
+        "15- Goods": "Goods imports",
+        "16- Services": "Services imports",
+        "18- Goods": "Goods exports",
+        "19- Services": "Services exports",
+    }
+    row_indices = {}
+    for label, column in current_labels.items():
+        matches = history_labels.index[history_labels == label]
+        if len(matches) != 1:
+            raise ValueError(f"Expected one TrackingHistory row for {label!r}, found {len(matches)}.")
+        row_indices[column] = matches[0]
+    current_rows = []
+    for col in range(2, history.shape[1]):
+        forecast_date = history.iloc[0, col]
+        if not _is_date_like(forecast_date):
+            continue
+        row = {name: history.iloc[idx, col] for name, idx in row_indices.items()}
+        if pd.isna(row["GDP Nowcast"]):
+            continue
+        row.update({
+            "Forecast Date": forecast_date,
+            "Quarter being forecasted": _quarter_end_timestamp(active_quarter),
+            "tracking_sheet": "TrackingHistory",
+        })
+        current_rows.append(row)
+    tracking = pd.concat([tracking, pd.DataFrame(current_rows)], ignore_index=True)
     tracking["Forecast Date"] = pd.to_datetime(tracking["Forecast Date"], errors="coerce")
     tracking["Quarter being forecasted"] = pd.to_datetime(
         tracking["Quarter being forecasted"], errors="coerce"
@@ -224,8 +271,8 @@ def load_tracking_latest(
         q_end = _quarter_end_timestamp(target_quarter)
         tracking = tracking.loc[tracking["Quarter being forecasted"] == q_end]
     if tracking.empty:
-        raise ValueError("No TrackingArchives rows match requested as-of date / quarter.")
-    return tracking.sort_values("Forecast Date").iloc[-1]
+        raise ValueError("No TrackingArchives or TrackingHistory rows match requested as-of date / quarter.")
+    return tracking.sort_values("Forecast Date", kind="stable").iloc[-1]
 
 
 def load_rls_bridge_weights(path: Path) -> dict[str, float]:
@@ -353,10 +400,8 @@ def forecast_indicator_quarterly_growth(
     if s.index.max() < needed_end:
         s = s.reindex(pd.date_range(s.index.min(), needed_end, freq="M"))
 
-    observed = s.copy()
-    for ts in months:
-        if ts > as_of_date:
-            observed.loc[ts] = np.nan
+    observed = s.loc[s.index <= needed_end].copy()
+    observed.loc[observed.index > as_of_date] = np.nan
 
     factor_ext = extend_factor_with_ar3(factor, needed_end)
     training = pd.concat([observed.rename("level"), factor_ext.rename("factor")], axis=1)
@@ -480,6 +525,7 @@ def estimate_bridge_forecast(
     top_n: int,
     decay: float,
     exclude_pandemic: bool,
+    growth_target: bool = True,
 ) -> BridgeForecastResult:
     y = pd.to_numeric(component_growth, errors="coerce")
     selected = select_component_indicators(y, indicator_growth_matrix, top_n=top_n)
@@ -554,8 +600,9 @@ def estimate_bridge_forecast(
     iqr = q95 - q05
     lower = q05 - 1.5 * iqr
     upper = q95 + 1.5 * iqr
-    lower = max(lower, -80.0)
-    upper = min(upper, 80.0)
+    if growth_target:
+        lower = max(lower, -80.0)
+        upper = min(upper, 80.0)
     forecast = float(np.clip(forecast, lower, upper))
 
     coef = pd.Series(beta, index=["const"] + feature_order)
@@ -568,10 +615,37 @@ def estimate_bridge_forecast(
 
 
 def growth_to_log_level(growth_series: pd.Series) -> pd.Series:
+    """Reconstruct log levels from QtrlyActDLog's 400 * log(q_t/q_{t-1})."""
     growth = pd.to_numeric(growth_series, errors="coerce")
-    increments = growth.map(_annualized_to_qoq_log)
+    increments = growth / 400.0
     level = increments.cumsum()
     return level
+
+
+def prepare_quarterly_inputs(
+    native_data: pd.DataFrame, real_levels: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Return bridge targets and BVAR states, retaining signed inventories.
+
+    Ordinary targets are compounded annual percent growth; their BVAR states
+    are log levels. Inventory's target and state are VZ_t / GDP_{t-1}, the
+    representation in working-paper Table A1. Its bridge remains a generic
+    approximation, not GDPNow's specialized inventory/contribution equations.
+    """
+    targets = pd.DataFrame(index=native_data.index)
+    states = pd.DataFrame(index=native_data.index)
+    for ticker in COMPONENT_TICKERS:
+        native = pd.to_numeric(native_data[ticker], errors="coerce")
+        if ticker == INVENTORY_TICKER:
+            lag_gdp = real_levels["GDPZ_USNA"].shift(1).reindex(native.index)
+            if (lag_gdp.dropna() <= 0).any():
+                raise ValueError("Inventory normalization requires positive lagged real GDP.")
+            targets[ticker] = native / lag_gdp
+            states[ticker] = targets[ticker]
+        else:
+            targets[ticker] = 100.0 * np.expm1(native / 100.0)
+            states[ticker] = growth_to_log_level(native)
+    return targets, states
 
 
 def bvar_minnesota_posterior_mean(
@@ -742,11 +816,13 @@ def run_full_model(
     target_q_end = _quarter_end_timestamp(target_q)
     prev_q_end = _quarter_end_timestamp(target_q - 1)
 
-    qtr_growth = load_wide_sheet(workbook_path, "QtrlyActDLog")[COMPONENT_TICKERS].copy()
+    qtr_native = load_wide_sheet(workbook_path, "QtrlyActDLog")[COMPONENT_TICKERS].copy()
     qtr_prices = load_wide_sheet(workbook_path, "QtrlyPriceForecasts")[COMPONENT_TICKERS].copy()
     qtr_real_levels = load_wide_sheet(workbook_path, "QtrlyGDPData")
+    qtr_growth, level_matrix = prepare_quarterly_inputs(qtr_native, qtr_real_levels)
     rls_weights = load_rls_bridge_weights(workbook_path)
     monthly_levels = load_monthly_levels(workbook_path)
+    monthly_levels.loc[monthly_levels.index > as_of] = np.nan
     factor_panel = load_monthly_panel(workbook_path)
     factor_panel = select_factor_panel(factor_panel, as_of_date=as_of, max_series=factor_max_series)
     factor = estimate_factor_series(factor_panel, use_kalman=use_kalman)
@@ -760,12 +836,10 @@ def run_full_model(
     blended_forecasts: dict[str, float] = {}
     used_indicators: dict[str, list[str]] = {}
 
-    # Build BVAR input from pseudo-log levels.
-    level_matrix = pd.DataFrame(
-        {ticker: growth_to_log_level(qtr_growth[ticker]) for ticker in COMPONENT_TICKERS},
-        index=qtr_growth.index,
-    )
+    # Log component levels plus signed inventory investment / lagged GDP.
     level_train = level_matrix.loc[level_matrix.index <= prev_q_end].dropna(how="any")
+    if level_train.empty or level_train.index[-1] != prev_q_end:
+        raise ValueError(f"BVAR requires complete quarterly inputs through {prev_q_end.date()}.")
     delta_levels = {ticker: (0.0 if ticker == INVENTORY_TICKER else 1.0) for ticker in COMPONENT_TICKERS}
     beta_post, beta_tickers, bvar_fitted_levels = bvar_minnesota_posterior_mean(
         level_train,
@@ -783,6 +857,8 @@ def run_full_model(
     # Convert in-sample fitted levels to growth for blend-weight estimation.
     bvar_fitted_growth = bvar_fitted_levels.copy()
     for ticker in COMPONENT_TICKERS:
+        if ticker == INVENTORY_TICKER:
+            continue  # Inventory state is already the signed ratio target.
         prev_level = level_train[ticker].shift(1).reindex(bvar_fitted_levels.index)
         bvar_fitted_growth[ticker] = (bvar_fitted_levels[ticker] - prev_level).map(_qoq_log_to_annualized)
 
@@ -810,6 +886,7 @@ def run_full_model(
             top_n=top_indicators,
             decay=decay,
             exclude_pandemic=exclude_pandemic,
+            growth_target=ticker != INVENTORY_TICKER,
         )
         bridge_forecasts[ticker] = bridge.forecast
         used_indicators[ticker] = bridge.indicators
@@ -817,7 +894,10 @@ def run_full_model(
         # BVAR forecast growth for this ticker.
         prev_level = float(level_train[ticker].iloc[-1])
         next_level = float(bvar_forecast_levels[ticker])
-        bvar_forecasts[ticker] = _qoq_log_to_annualized(next_level - prev_level)
+        bvar_forecasts[ticker] = (
+            next_level if ticker == INVENTORY_TICKER
+            else _qoq_log_to_annualized(next_level - prev_level)
+        )
 
         bvar_hist_series = bvar_fitted_growth[ticker].dropna()
         delta = constrained_blend_weight(
@@ -842,14 +922,16 @@ def run_full_model(
         if level_ticker not in qtr_real_levels.columns:
             raise ValueError(f"Missing level ticker '{level_ticker}' in QtrlyGDPData for Fisher aggregation.")
         level_series = pd.to_numeric(qtr_real_levels[level_ticker], errors="coerce")
-        hist = level_series.loc[level_series.index <= prev_q_end].dropna()
-        if hist.empty:
+        if prev_q_end not in level_series.index or pd.isna(level_series.loc[prev_q_end]):
             raise ValueError(
-                f"No level history for ticker '{level_ticker}' on or before {prev_q_end.date()}."
+                f"Missing previous-quarter level for '{level_ticker}' at {prev_q_end.date()}."
             )
-        prev_level = float(hist.iloc[-1])
+        prev_level = float(level_series.loc[prev_q_end])
         q_prev[ticker] = prev_level
-        q_curr[ticker] = _project_level_from_annualized_growth(prev_level, blended_forecasts[ticker])
+        if ticker == INVENTORY_TICKER:
+            q_curr[ticker] = blended_forecasts[ticker] * float(qtr_real_levels.loc[prev_q_end, "GDPZ_USNA"])
+        else:
+            q_curr[ticker] = _project_level_from_annualized_growth(prev_level, blended_forecasts[ticker])
 
     # Price levels for t-1 and t from workbook.
     price_prev = qtr_prices.loc[prev_q_end, COMPONENT_TICKERS]
@@ -873,6 +955,7 @@ def run_full_model(
         rows.append(
             {
                 "component_ticker": ticker,
+                "forecast_unit": "fraction_of_lagged_real_gdp" if ticker == INVENTORY_TICKER else "percent_saar",
                 "official_component_tracking": official_component,
                 "bridge_forecast": bridge_forecasts[ticker],
                 "bvar_forecast": bvar_forecasts[ticker],
@@ -882,11 +965,20 @@ def run_full_model(
                 if pd.notna(official_component)
                 else np.nan,
                 "indicators_used": ";".join(used_indicators.get(ticker, [])),
+                "previous_real_level_millions": q_prev[ticker],
+                "forecast_real_level_millions": q_curr[ticker],
             }
         )
     component_df = pd.DataFrame(rows).sort_values("component_ticker")
 
     summary = {
+        "workbook_path": str(workbook_path),
+        "workbook_sha256": hashlib.sha256(workbook_path.read_bytes()).hexdigest(),
+        "model_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "model_version": "current_quarter_corrected_units_v1",
+        "tracking_sheet": tracking_row["tracking_sheet"],
+        "model_status": "approximate; not an exact independent GDPNow replication",
+        "data_vintage_note": "Uses this workbook's stored data, prices and blend weights; --as-of-date does not reconstruct historical release vintages.",
         "forecast_date": as_of.strftime("%Y-%m-%d"),
         "target_quarter": str(target_q),
         "target_quarter_end": target_q_end.strftime("%Y-%m-%d"),
@@ -898,6 +990,13 @@ def run_full_model(
         "use_kalman": bool(use_kalman),
         "decay": float(decay),
         "exclude_pandemic_2020": bool(exclude_pandemic),
+        "inventory_forecast_billions_chained_2017_dollars": q_curr[INVENTORY_TICKER] / 1000.0,
+        "limitations": [
+            "Generic bridges and estimated blends; specialized consumption, inventory and trade modules are not replicated.",
+            "Factor panel is selected from available workbook series, not the complete prescribed GDPNow panel.",
+            "Official workbook component price forecasts and six bridge weights are reused.",
+            "This is a snapshot calculation, not a historical real-time-vintage backtest.",
+        ],
     }
 
     outdir.mkdir(parents=True, exist_ok=True)
@@ -907,7 +1006,7 @@ def run_full_model(
     with summary_path.open("w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
 
-    print("\nGDPNow Full-Model Clone Report")
+    print("\nGDPNow Approximate Model Report")
     print("==============================")
     print(f"Forecast date used: {summary['forecast_date']}")
     print(f"Quarter being forecasted: {summary['target_quarter_end']}")
@@ -922,7 +1021,7 @@ def run_full_model(
     if not mismatch_df.empty:
         mismatch_df["abs_diff"] = mismatch_df["diff_vs_official_component"].abs()
         top = mismatch_df.sort_values("abs_diff", ascending=False).head(10)
-        print("\nTop component mismatches vs TrackingArchives:")
+        print(f"\nTop component mismatches vs {tracking_row['tracking_sheet']}:")
         print(
             top[
                 [

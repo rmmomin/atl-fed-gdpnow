@@ -1,0 +1,104 @@
+{
+  "old_workbook": "data/GDPTrackingModelDataAndForecasts.xlsx",
+  "new_workbook": "data/GDPTrackingModelDataAndForecasts_2026-09-16.xlsx",
+  "forecast_vintage": "2026-09-10",
+  "quarter": "2026Q3",
+  "monthly_level_series": 146,
+  "transformed_series": 148,
+  "monthly_series_with_later_nonmissing_endpoint": 144,
+  "ism": {
+    "NAPMC@USECON": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": true,
+      "last_month": "2026-08-31",
+      "last_value": 54.6,
+      "history_observations": 812
+    },
+    "NAPMOI@USECON": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": false,
+      "last_month": null,
+      "last_value": null,
+      "history_observations": 0
+    },
+    "NAPMEI@USECON": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": false,
+      "last_month": null,
+      "last_value": null,
+      "history_observations": 0
+    },
+    "NAPMNI@USECON": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": false,
+      "last_month": null,
+      "last_value": null,
+      "history_observations": 0
+    },
+    "NAPMII@USECON": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": true,
+      "last_month": "2026-08-31",
+      "last_value": 50.6,
+      "history_observations": 812
+    },
+    "NAPMVDI@USECON": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": false,
+      "last_month": null,
+      "last_value": null,
+      "history_observations": 0
+    },
+    "NMFC@SURVEYS": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": false,
+      "last_month": null,
+      "last_value": null,
+      "history_observations": 0
+    },
+    "NAPMPI@USECON": {
+      "in_monthly_levels": false,
+      "in_transformed_panel": false,
+      "in_inventory_raw": true,
+      "last_month": "2026-08-31",
+      "last_value": 71.1,
+      "history_observations": 812
+    }
+  },
+  "selected_monthly_indicators_pca80": 54,
+  "missing_target_quarter_cells_among_selected_by_month": {
+    "2026-07": 3,
+    "2026-08": 39,
+    "2026-09": 54
+  },
+  "notes": [
+    "Missing Q3 observations are forecast by the approximate monthly models; they are not filled with zeros.",
+    "Full ISM histories remain missing for five series; known ISM histories in InventoryRaw are still not wired into the approximate factor model.",
+    "Separate BEA gold download is available in data/bea; this rerun uses workbook trade series without a second manual gold subtraction.",
+    "Two workbook deflator forecast series extend through December; these are forecasts, not released economic observations. Values dated after the run cutoff are masked."
+  ],
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "openpyxl": "3.1.5",
+    "statsmodels": "0.15.0"
+  },
+  "series_by_latest_nonmissing_month": {
+    "2026-06-30": 7,
+    "2026-07-31": 98,
+    "2026-08-31": 39,
+    "2026-12-31": 2
+  },
+  "workbook_price_forecast_series_extending_through_december": [
+    "CSFPMDeffr",
+    "CoreRealRetailPCEDefExFoodSvcfr"
+  ]
+}

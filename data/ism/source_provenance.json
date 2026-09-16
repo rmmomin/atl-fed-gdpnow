@@ -1,0 +1,81 @@
+[
+  {
+    "id": "manufacturing_2020-01",
+    "sector": "manufacturing",
+    "report_month": "2020-01",
+    "release_date": "2020-02-03",
+    "url": "https://www.prnewswire.com/news-releases/pmi-at-50-9-gdp-growing-at-2-4-january-2020-manufacturing-ism-report-on-business-300997110.html",
+    "raw_file": "/Users/rayhanmomin/code/atl-gdpnow/data/ism/raw/manufacturing_2020-01.html",
+    "sha256": "5b4abb1e59831b03a4aae6100a4eda6fc0cdcc3f7908a7c6df2fcddfa033962b",
+    "cached_file_mtime_utc": "2026-09-16T15:28:21.188779+00:00",
+    "observations": 36
+  },
+  {
+    "id": "manufacturing_2025-11",
+    "sector": "manufacturing",
+    "report_month": "2025-11",
+    "release_date": "2025-12-01",
+    "url": "https://www.prnewswire.com/news-releases/manufacturing-pmi-at-48-2-november-2025-ism-manufacturing-pmi-report-302626979.html",
+    "raw_file": "/Users/rayhanmomin/code/atl-gdpnow/data/ism/raw/manufacturing_2025-11.html",
+    "sha256": "0f70a85a8db66ed6b1941c801be222be89f3e083e0175861205a9fce0c222a79",
+    "cached_file_mtime_utc": "2026-09-16T15:28:21.073647+00:00",
+    "observations": 36
+  },
+  {
+    "id": "manufacturing_2026-02",
+    "sector": "manufacturing",
+    "report_month": "2026-02",
+    "release_date": "2026-03-02",
+    "url": "https://www.prnewswire.com/news-releases/manufacturing-pmi-at-52-4-february-2026-ism-manufacturing-pmi-report-302699883.html",
+    "raw_file": "/Users/rayhanmomin/code/atl-gdpnow/data/ism/raw/manufacturing_2026-02.html",
+    "sha256": "c7857df55b587680c622aa4dcd41e4c71f7143b4f6c52822f43bdb12483291c4",
+    "cached_file_mtime_utc": "2026-09-16T15:28:21.082727+00:00",
+    "observations": 36
+  },
+  {
+    "id": "services_2026-02",
+    "sector": "services",
+    "report_month": "2026-02",
+    "release_date": "2026-03-04",
+    "url": "https://www.prnewswire.com/news-releases/services-pmi-at-56-1-february-2026-ism-services-pmi-report-302702978.html",
+    "raw_file": "/Users/rayhanmomin/code/atl-gdpnow/data/ism/raw/services_2026-02.html",
+    "sha256": "07ec8f10edf5176aa8134ad62d37fdb7cd604e7dc2f6082c3d2f00da2e9384e8",
+    "cached_file_mtime_utc": "2026-09-16T15:28:44.024491+00:00",
+    "observations": 12
+  },
+  {
+    "id": "manufacturing_2026-05",
+    "sector": "manufacturing",
+    "report_month": "2026-05",
+    "release_date": "2026-06-01",
+    "url": "https://www.prnewswire.com/news-releases/manufacturing-pmi-at-54-may-2026-ism-manufacturing-pmi-report-302786165.html",
+    "raw_file": "/Users/rayhanmomin/code/atl-gdpnow/data/ism/raw/manufacturing_2026-05.html",
+    "sha256": "66d42f95dc2f2fd4cb2bd543d4dfddcf7b045206c42f76fcc710d57eea3fb026",
+    "cached_file_mtime_utc": "2026-09-16T15:28:21.079765+00:00",
+    "observations": 36
+  },
+  {
+    "id": "manufacturing_2026-08",
+    "sector": "manufacturing",
+    "report_month": "2026-08",
+    "release_date": "2026-09-01",
+    "release_date_source": "https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/",
+    "url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-pmi-reports/pmi/august/",
+    "raw_file": "/Users/rayhanmomin/code/atl-gdpnow/data/ism/raw/manufacturing_2026-08.html",
+    "sha256": "a54f5f381bbc01538dd39a6876a9f594753c3ea812672516b2b3105a023a8dd9",
+    "cached_file_mtime_utc": "2026-09-16T15:27:31.139806+00:00",
+    "observations": 36
+  },
+  {
+    "id": "services_2026-08",
+    "sector": "services",
+    "report_month": "2026-08",
+    "release_date": "2026-09-03",
+    "release_date_source": "https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/",
+    "url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-pmi-reports/services/august/",
+    "raw_file": "/Users/rayhanmomin/code/atl-gdpnow/data/ism/raw/services_2026-08.html",
+    "sha256": "a0988fe50fb49e4ca6df8ebbba401b420bd961b1b906bfe57f7f8aee12f49213",
+    "cached_file_mtime_utc": "2026-09-16T15:27:31.431536+00:00",
+    "observations": 12
+  }
+]

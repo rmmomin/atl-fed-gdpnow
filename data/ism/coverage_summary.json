@@ -1,0 +1,80 @@
+{
+  "generated_at_utc": "2026-09-16T15:30:01.180824+00:00",
+  "as_of_release_cutoff": null,
+  "reports_parsed": 7,
+  "observations_including_release_vintages": 204,
+  "unique_series_months": 153,
+  "complete_eight_series_months": 13,
+  "complete_months": [
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08"
+  ],
+  "series_months_with_multiple_published_values": 12,
+  "coverage_by_series": {
+    "NAPMC@USECON": {
+      "min": "2019-02",
+      "max": "2026-08",
+      "count": 33
+    },
+    "NAPMEI@USECON": {
+      "min": "2019-10",
+      "max": "2026-08",
+      "count": 17
+    },
+    "NAPMII@USECON": {
+      "min": "2019-10",
+      "max": "2026-08",
+      "count": 17
+    },
+    "NAPMNI@USECON": {
+      "min": "2019-10",
+      "max": "2026-08",
+      "count": 17
+    },
+    "NAPMOI@USECON": {
+      "min": "2019-10",
+      "max": "2026-08",
+      "count": 17
+    },
+    "NAPMPI@USECON": {
+      "min": "2019-10",
+      "max": "2026-08",
+      "count": 17
+    },
+    "NAPMVDI@USECON": {
+      "min": "2019-10",
+      "max": "2026-08",
+      "count": 17
+    },
+    "NMFC@SURVEYS": {
+      "min": "2025-03",
+      "max": "2026-08",
+      "count": 18
+    }
+  },
+  "selection_rule": "Latest release among collected sources, on/before cutoff; not necessarily the latest revision published by ISM.",
+  "limitations": [
+    "Incomplete historical coverage; no interpolation or synthetic backfill.",
+    "Retrospective table values were available on their report release date, not necessarily on the original month release date.",
+    "Older releases mix seasonal-adjustment vintages; preserve vintages for replication.",
+    "This dataset is not yet connected to the GDPNow approximation."
+  ],
+  "workbook_crosscheck": {
+    "workbook": "data/GDPTrackingModelDataAndForecasts_2026-09-16.xlsx",
+    "overlap_observations": 67,
+    "all_overlap_differing_values": 20,
+    "2026_overlap_observations": 24,
+    "2026_differing_values": 0
+  }
+}

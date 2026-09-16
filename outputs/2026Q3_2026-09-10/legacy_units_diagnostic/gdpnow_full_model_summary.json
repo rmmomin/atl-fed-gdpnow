@@ -1,0 +1,24 @@
+{
+  "workbook_path": "/Users/rayhanmomin/code/atl-gdpnow/data/GDPTrackingModelDataAndForecasts_2026-09-16.xlsx",
+  "workbook_sha256": "eb1ce08773a6f4f057dc6b57bb2f8479112bdb06652ad5886bc8fd97fe6e96da",
+  "tracking_sheet": "TrackingHistory",
+  "model_status": "approximate; not an exact independent GDPNow replication",
+  "data_vintage_note": "Uses this workbook's stored data, prices and blend weights; --as-of-date does not reconstruct historical release vintages.",
+  "forecast_date": "2026-09-10",
+  "target_quarter": "2026Q3",
+  "target_quarter_end": "2026-09-30",
+  "gdp_nowcast_python_fisher": 3.481103722457024,
+  "gdp_nowcast_official_tracking": 4.4163597830737755,
+  "diff_python_minus_official": -0.9352560606167515,
+  "factor_series_count": 80,
+  "top_indicators_per_component": 6,
+  "use_kalman": false,
+  "decay": 0.98,
+  "exclude_pandemic_2020": true,
+  "model_version": "legacy_units_diagnostic",
+  "model_source_sha256": "97ca7ed48e1d0560e8346ff3ae87177b09ea27b4a4c9a9216cec1eb41e0dd668",
+  "known_issues": [
+    "Annualized log growth incorrectly treated as compounded growth.",
+    "Signed inventory investment level incorrectly treated as percentage growth."
+  ]
+}

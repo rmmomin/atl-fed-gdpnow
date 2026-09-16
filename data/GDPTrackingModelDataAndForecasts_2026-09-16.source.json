@@ -1,0 +1,11 @@
+{
+  "source_url": "https://www.atlantafed.org/-/media/Project/Atlanta/FRBA/Documents/cqer/researchcq/gdpnow/GDPTrackingModelDataAndForecasts.xlsx",
+  "retrieved_at_utc": "2026-09-16T15:20:55.517420+00:00",
+  "filename": "GDPTrackingModelDataAndForecasts_2026-09-16.xlsx",
+  "bytes": 10877907,
+  "sha256": "eb1ce08773a6f4f057dc6b57bb2f8479112bdb06652ad5886bc8fd97fe6e96da",
+  "latest_forecast_date": "2026-09-10",
+  "target_quarter": "2026Q3",
+  "official_gdp_nowcast_saar_percent": 4.4163597830737755,
+  "note": "Unmodified official workbook. Retrieval date differs from latest forecast date."
+}

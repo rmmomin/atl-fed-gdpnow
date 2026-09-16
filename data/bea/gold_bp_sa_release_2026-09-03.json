@@ -1,0 +1,314 @@
+{
+  "source_page": "https://www.bea.gov/international/detailed-trade-data",
+  "source_zip": "https://apps.bea.gov/international/zip/IDS0182.zip",
+  "release_date_from_source_page": "2026-09-03",
+  "retrieved_date": "2026-09-16",
+  "sha256": "1f871d8df6681a05ea5edeec8c103a932bbdb4260a6d561e5fa2af66f6e67cad",
+  "units": "millions of US dollars, monthly, seasonally adjusted, balance-of-payments basis; not annualized",
+  "observations": [
+    {
+      "series": "MNMGLD",
+      "month": "2025-01",
+      "value": 33134.007,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "C5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-02",
+      "value": 28657.676,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "D5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-03",
+      "value": 16694.519,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "E5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-04",
+      "value": 2196.834,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "F5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-05",
+      "value": 847.918,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "G5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-06",
+      "value": 798.293,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "H5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-07",
+      "value": 10404.847,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "I5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-08",
+      "value": 2857.606,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "J5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-09",
+      "value": 7315.182,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "K5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-10",
+      "value": 5690.287,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "L5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-11",
+      "value": 5320.551,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "M5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2025-12",
+      "value": 4867.635,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "N5"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2026-01",
+      "value": 4632.48,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "C247"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2026-02",
+      "value": 2325.338,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "D247"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2026-03",
+      "value": 2347.498,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "E247"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2026-04",
+      "value": 2094.844,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "F247"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2026-05",
+      "value": 2086.702,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "G247"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2026-06",
+      "value": 1827.221,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "H247"
+    },
+    {
+      "series": "MNMGLD",
+      "month": "2026-07",
+      "value": 1907.767,
+      "source_file": "IDS0182_Imports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "I247"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-01",
+      "value": 2205.892,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "C6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-02",
+      "value": 7039.428,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "D6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-03",
+      "value": 6215.566,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "E6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-04",
+      "value": 18771.947,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "F6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-05",
+      "value": 13104.538,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "G6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-06",
+      "value": 5518.858,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "H6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-07",
+      "value": 5230.619,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "I6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-08",
+      "value": 4625.74,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "J6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-09",
+      "value": 10643.911,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "K6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-10",
+      "value": 18403.176,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "L6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-11",
+      "value": 13585.453,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "M6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2025-12",
+      "value": 6152.047,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "N6"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2026-01",
+      "value": 10679.317,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "C242"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2026-02",
+      "value": 18710.727,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "D242"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2026-03",
+      "value": 17858.051,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "E242"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2026-04",
+      "value": 12061.119,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "F242"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2026-05",
+      "value": 5870.865,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "G242"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2026-06",
+      "value": 9308.36,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "H242"
+    },
+    {
+      "series": "XNMGLD",
+      "month": "2026-07",
+      "value": 5416.679,
+      "source_file": "IDS0182_Exports_Current.xlsx",
+      "sheet": "BP-based, SA",
+      "cell": "I242"
+    }
+  ]
+}
